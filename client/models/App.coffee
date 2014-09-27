@@ -9,27 +9,34 @@ class window.App extends Backbone.Model
     @get('playerHand').on 'checkScore', => @checkBust()
 
 
+  playerScores:->
+    if @get('playerHand').scores()[1]<22 then @get('playerHand').scores()[1]
+    else @get('playerHand').scores()[0]
+
+  dealerScores:->
+    if @get('dealerHand').scores()[1]<22 then @get('dealerHand').scores()[1]
+    else @get('dealerHand').scores()[0]
 
   checkBust:->
 
-    $('body').append('<img src= "img/giphy.gif" class="lose"><img>') if @get('playerHand').scores()[0]>21
+    $('body').append('<img src= "img/giphy.gif" class="lose"><img>') if @playerScores()>21
     setTimeout (->
         window.location.reload()
         return
     ), 5000
   checkScore:->
-    $('body').append('<img src= "img/win.gif" class="win"><img>') if @get('dealerHand').scores()[0]>21 or @get('dealerHand').scores()[0]<@get('playerHand').scores()[0]
+    $('body').append('<img src= "img/win.gif" class="win"><img>') if @dealerScores()>21 or @dealerScores()<@playerScores()
 
     setTimeout (->
         window.location.reload()
         return
     ), 5000
-    $('body').append('<img src= "img/giphy.gif" class="lose"><img>') if @get('dealerHand').scores()[0]>@get('playerHand').scores()[0] and @get('dealerHand').scores()[0]<22
+    $('body').append('<img src= "img/giphy.gif" class="lose"><img>') if @dealerScores()>@playerScores() and @dealerScores()<22
     setTimeout (->
         window.location.reload()
         return
     ), 5000
   playerDone:->
     @get('dealerHand').models[0].flip()
-    @get('dealerHand').hit()  while @get('dealerHand').scores()[0]<17
+    @get('dealerHand').hit()  while @dealerScores()<17
     @checkScore()
