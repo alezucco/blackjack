@@ -12,18 +12,23 @@ class window.App extends Backbone.Model
 
   checkBust:->
 
-    alert 'You lost ALL YOUR MONEEEY' if @get('playerHand').scores()[0]>21
-    window.location.reload()
-    #@set 'playerHand', deck.dealPlayer()
-    #@set 'dealerHand', deck.dealDealer()
+    $('body').append('<img src= "img/giphy.gif" class="lose"><img>') if @get('playerHand').scores()[0]>21
+    setTimeout (->
+        window.location.reload()
+        return
+    ), 5000
   checkScore:->
-    alert '$$$$$$$$$$$$' if @get('dealerHand').scores()[0]>21 or @get('dealerHand').scores()[0]<@get('playerHand').scores()[0]
-    #@set 'playerHand', deck.dealPlayer()
-    #@set 'dealerHand', deck.dealDealer()
-    window.location.reload()
-    #window.location()
-    alert 'You lost ALL YOUR MONEEEY' if @get('dealerHand').scores()[0]>@get('playerHand').scores()[0]
-    window.location.reload()
+    $('body').append('<img src= "img/win.gif" class="win"><img>') if @get('dealerHand').scores()[0]>21 or @get('dealerHand').scores()[0]<@get('playerHand').scores()[0]
+
+    setTimeout (->
+        window.location.reload()
+        return
+    ), 5000
+    $('body').append('<img src= "img/giphy.gif" class="lose"><img>') if @get('dealerHand').scores()[0]>@get('playerHand').scores()[0] and @get('dealerHand').scores()[0]<22
+    setTimeout (->
+        window.location.reload()
+        return
+    ), 5000
   playerDone:->
     @get('dealerHand').models[0].flip()
     @get('dealerHand').hit()  while @get('dealerHand').scores()[0]<17
